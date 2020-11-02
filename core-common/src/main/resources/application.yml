@@ -1,0 +1,54 @@
+spring:
+
+  data.mongodb.uri: mongodb://localhost:27017/dwh
+  jackson:
+    serialization.write_dates_as_timestamps: false
+    default-property-inclusion: NON_NULL
+
+  activemq:
+    broker-url: vm://embedded?broker.persistent=false&broker.useShutdownHook=false&jms.redeliveryPolicy.maximumRedeliveries=0
+    in-memory: true
+
+  jms:
+    pub-sub-domain: true
+    listener:
+      concurrency: 1
+      max-concurrency: 1 # for topic listeners
+
+jms:
+  throttling:
+    delay: 10
+    initialDelay: 30
+
+server:
+  port: 8081
+
+---
+spring.profiles: debug-logs
+logging.level:
+  #  org.springframework.beans.factory.support.DefaultListableBeanFactory: DEBUG
+  org.springframework.data.mongodb.core.MongoTemplate: debug
+#    org.apache.activemq: DEBUG
+
+---
+spring:
+  profiles: embedded
+  data.mongodb.port: 0
+  mongodb.embedded.version: 4.0.2
+  mongodb.embedded.features: no_http_interface_arg
+
+---
+spring:
+  profiles: testing
+jms:
+  throttling:
+    delay: 1
+    initialDelay: 1
+
+---
+spring:
+  profiles: prod
+  data.mongodb.uri: mongodb://mongo/dwh
+
+server:
+  port: 8080

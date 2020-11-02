@@ -1,0 +1,6 @@
+ext.dockerImageName = "bees-dwh-core"
+apply from: "$rootDir/docker-build.gradle"
+
+bootJar {
+    baseName = 'bees-dwh-core'
+}

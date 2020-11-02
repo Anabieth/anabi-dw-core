@@ -1,0 +1,72 @@
+plugins {
+    id 'com.palantir.git-version' version '0.11.0'
+    id 'org.springframework.boot' version '2.1.2.RELEASE' apply false
+    id 'io.spring.dependency-management' version '1.0.6.RELEASE' apply false
+    id 'eclipse'
+    id 'idea'
+    id 'com.palantir.jacoco-full-report' version '0.4.0'
+}
+
+apply plugin: 'base'
+
+version gitVersion()
+
+group 'lv.llu.science.dwh'
+
+allprojects {
+    apply plugin: 'io.spring.dependency-management'
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom("org.springframework.boot:spring-boot-dependencies:2.1.2.RELEASE")
+        }
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'groovy'
+    apply plugin: 'jacoco'
+    apply plugin: 'org.springframework.boot'
+
+    jacoco {
+        toolVersion = "0.8.2"
+    }
+
+    sourceCompatibility = 1.11
+    version rootProject.version
+
+    task allDeps(type: DependencyReportTask) {}
+
+    dependencies {
+        if (project.name != 'core-common') {
+            compile project(':core-common')
+        }
+
+        testCompile 'org.codehaus.groovy:groovy-all'
+        testCompile 'org.spockframework:spock-core:1.1-groovy-2.4'
+        testCompile 'org.springframework.boot:spring-boot-starter-test'
+        testCompile 'org.spockframework:spock-spring:1.1-groovy-2.4'
+        testCompile 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'
+    }
+
+    test.doLast {
+        copy {
+            from 'build/test-results/test'
+            into "$rootDir/build/xml-report/${project.name}"
+        }
+    }
+}
+
+evaluationDependsOnChildren()
+task testReport(type: TestReport) {
+    destinationDir = file("$buildDir/reports/allTests")
+    reportOn subprojects*.test.binResultsDir
+}
+subprojects {
+    test.finalizedBy(testReport)
+}

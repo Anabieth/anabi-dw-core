@@ -1,0 +1,13 @@
+package lv.llu.science.dwh.domain.messages;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class DataInMessage {
+    private String type;
+    private String swampId;
+}

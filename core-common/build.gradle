@@ -1,0 +1,15 @@
+
+jar {
+    enabled = true
+    baseName = 'core-common-lib'
+}
+
+dependencies {
+    compile 'org.springframework.boot:spring-boot-starter-web'
+    compile 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    compile 'org.springframework.boot:spring-boot-starter-activemq'
+
+    compile 'org.projectlombok:lombok'
+    compile 'org.modelmapper:modelmapper:0.7.5'
+    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+}
