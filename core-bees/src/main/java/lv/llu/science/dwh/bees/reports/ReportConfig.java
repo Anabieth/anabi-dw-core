@@ -29,4 +29,9 @@ public class ReportConfig {
     public BasicReport voltageReport() {
         return factory.createBasicReport("voltage", "Raw voltage measurements", "voltage_hourly");
     }
+
+    @Bean
+    public BasicReport audioReport() {
+        return factory.createBasicReport("audio", "Raw audio measurements", "audio_hourly");
+    }
 }
